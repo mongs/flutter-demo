@@ -44,6 +44,7 @@ class _MyHomeState extends State<MyHome> {
           IconButton(icon: Icon(Icons.search), onPressed: () {})
         ],
       ),
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -56,11 +57,51 @@ class _MyHomeState extends State<MyHome> {
           ],
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.red,
         tooltip: 'click this button and add the count',
         onPressed: _add,
+      ),
+
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage('https://cdn.yuque.com/yuque/0/2018/jpeg/105925/1531189316478-avatar/aedb1904-7a8b-4250-9bd3-fb3605a0fcad.jpeg?x-oss-process=image/resize,m_fill,w_192,h_192/format,png'),
+              ),
+              accountEmail: Text('fengjun17@outlook.com'),
+              accountName: Text('Wally Fun'),
+              otherAccountsPictures: <Widget>[
+                Container(
+                    child: Image.asset('images/logo.png'),
+                  color: Color.fromARGB(100, 200, 30, 70),
+                )
+              ],
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage('http://www.liulongbin.top:3005/images/bg1.jpg'),
+                  fit: BoxFit.cover
+                )
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.mail),
+              title: Text('邮件'),
+            ),
+            ListTile(
+              leading: Icon(Icons.account_box),
+              title: Text('个人资料'),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('设置'),
+            ),
+          ],
+        ),
       ),
     );
   }

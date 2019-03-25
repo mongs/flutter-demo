@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
 
 void main() => runApp(MyApp());
 
@@ -6,103 +7,99 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'demo',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
+      title: '编写第一个Flutter程序',
+      theme: new ThemeData(
+        primaryColor: Colors.red,
       ),
-      home: MyHome(title: 'Hello Flutter'),
+      // Scaffold 提供导航栏 标题 body(包含很复杂的widget树)
+      home: new RandomWords(),
     );
   }
 }
 
-class MyHome extends StatefulWidget {
-
-  // 继承自父类
-  final String title;
-  // 构造函数
-  MyHome({Key key, @required this.title}) : super(key: key);
-
+class RandomWords extends StatefulWidget {
   @override
-  _MyHomeState createState() => _MyHomeState();
+  RandomWordsState createState() => RandomWordsState();
 }
 
-class _MyHomeState extends State<MyHome> {
-  var _count = 0;
+class RandomWordsState extends State<RandomWords> {
+  final _suggestions = <WordPair>[];
+  final _saved = new Set<WordPair>();
+  final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
 
-  _add() {
-    setState(() {
-      _count++;
-    });
+  void _pushSaved() {
+    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+      final tiles = _saved.map((pair) {
+        return new ListTile(
+          title: new Text(
+            pair.asPascalCase,
+            style: _biggerFont,
+          ),
+        );
+      });
+
+      final divided =
+          ListTile.divideTiles(tiles: tiles, context: context).toList();
+
+      return new Scaffold(
+          appBar: AppBar(
+            title: Text('Saved Suggestions'),
+          ),
+          body: new ListView(
+            children: divided,
+          ));
+    }));
+  }
+
+  Widget _buildSuggestions() {
+    return new ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemBuilder: (BuildContext context, int i) {
+        if (i.isOdd) return new Divider();
+        final index = i ~/ 2;
+
+        if (index >= _suggestions.length) {
+          _suggestions.addAll(generateWordPairs().take(10));
+        }
+        return _buildRow(_suggestions[index]);
+      },
+    );
+  }
+
+  Widget _buildRow(WordPair pair) {
+    final alreadySaved = _saved.contains(pair);
+
+    return new ListTile(
+      title: new Text(
+        pair.asPascalCase,
+        style: _biggerFont,
+      ),
+      trailing: new Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
+      ),
+      onTap: () {
+        setState(() {
+          if (alreadySaved) {
+            _saved.remove(pair);
+          } else {
+            _saved.add(pair);
+          }
+        });
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('编写第一个Flutter程序'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.search), onPressed: () {})
+          new IconButton(icon: Icon(Icons.list), onPressed: _pushSaved)
         ],
       ),
-
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '$_count',
-              style: TextStyle(fontSize: 80, color: Colors.blue[700]),
-            ),
-            Text('点击浮动按钮, 修改数字'),
-          ],
-        ),
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.red,
-        tooltip: 'click this button and add the count',
-        onPressed: _add,
-      ),
-
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage('https://cdn.yuque.com/yuque/0/2018/jpeg/105925/1531189316478-avatar/aedb1904-7a8b-4250-9bd3-fb3605a0fcad.jpeg?x-oss-process=image/resize,m_fill,w_192,h_192/format,png'),
-              ),
-              accountEmail: Text('fengjun17@outlook.com'),
-              accountName: Text('Wally Fun'),
-              otherAccountsPictures: <Widget>[
-                Container(
-                    child: Image.asset('images/logo.png'),
-                  color: Color.fromARGB(100, 200, 30, 70),
-                )
-              ],
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage('http://www.liulongbin.top:3005/images/bg1.jpg'),
-                  fit: BoxFit.cover
-                )
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.mail),
-              title: Text('邮件'),
-            ),
-            ListTile(
-              leading: Icon(Icons.account_box),
-              title: Text('个人资料'),
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('设置'),
-            ),
-          ],
-        ),
-      ),
+      body: _buildSuggestions(),
     );
   }
 }

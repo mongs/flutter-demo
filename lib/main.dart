@@ -38,6 +38,8 @@ class MyScaffold extends StatelessWidget {
     return new Scaffold(
       appBar: AppBar(
         title: new Text('title'),
+        leading:
+            new IconButton(icon: Icon(Icons.account_circle), onPressed: () {}),
       ),
       body: new Material(
         child: new Column(
@@ -50,18 +52,26 @@ class MyScaffold extends StatelessWidget {
               ),
             ),
             new Expanded(
-              child: new Container(
-                decoration: new BoxDecoration(
-                  color: Colors.red[100],
-                ),
-                child: new Center(
-                  child: new Text('hello Expanded'),
+              // 包装添加事件
+              child: new GestureDetector(
+                onTap: () {
+                  print('tap this container');
+                },
+                child: new Container(
+                  decoration: new BoxDecoration(
+                    color: Colors.red[100],
+                  ),
+                  child: new Center(
+                    child: new Text('hello Expanded'),
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
+      floatingActionButton: new FloatingActionButton(
+          onPressed: () {}, child: new Icon(Icons.add)),
     );
   }
 }

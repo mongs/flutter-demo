@@ -6,13 +6,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: '复杂widget',
+      title: 'TabBar',
       theme: ThemeData(
         primarySwatch: Colors.yellow,
-        // 高亮色
-        highlightColor: Colors.yellowAccent,
-        // 水波纹颜色
-        splashColor: Colors.yellow[800],
       ),
       home: new MyHome(),
     );
@@ -37,52 +33,49 @@ class MyBody extends StatefulWidget {
 class _MyBodyState extends State<MyBody> {
   @override
   Widget build(BuildContext context) {
-    return new DefaultTabController(
-      length: 3,
-      child: new Scaffold(
+    return new Scaffold(
         appBar: AppBar(
-          leading: Icon(Icons.menu),
-          title: new Text('tabbar'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.settings_bluetooth),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.settings_input_hdmi),
-              onPressed: () {},
-            ),
-          ],
-          bottom: TabBar(
-            unselectedLabelColor: Colors.blueGrey,
-            indicatorColor: Colors.black54,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorWeight: 3.0,
-            tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.shop),
+          title: new Text('drawer'),
+        ),
+        body: null,
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage:
+                      new NetworkImage('http://fengjun.xyz/uploads/avatar.jpg'),
+                ),
+                accountEmail: Text('29176702@qq.com'),
+                accountName: Text('Wally fun'.toUpperCase()),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image:
+                        NetworkImage('http://fengjun.xyz/uploads/avatar.jpg'),
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                        Colors.yellow[400].withOpacity(0.6), BlendMode.srcOver),
+                  ),
+                ),
+                onDetailsPressed: () {
+                  print('hello');
+                },
               ),
-              Tab(
-                icon: Icon(Icons.shopping_basket),
-              ),
-              Tab(
-                icon: Icon(Icons.card_giftcard),
+              ListTile(
+                title: Text('我的收藏'),
+                subtitle: Text('what'),
+                leading: Icon(Icons.favorite),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.black26,
+                  size: 14.0,
+                ),
+                // 点击关闭drawer
+                onTap: () => Navigator.pop(context),
               ),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: <Widget>[
-            Icon(Icons.card_membership, size: 120.0, color: Colors.black26),
-            Icon(Icons.category, size: 120.0, color: Colors.black26),
-            Icon(Icons.receipt, size: 120.0, color: Colors.black26),
-          ],
-        ),
-      ),
-    );
+        ));
   }
 }

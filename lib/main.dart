@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './demo/layout.dart';
 
 void main() => runApp(MyApp());
 
@@ -6,7 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'TabBar',
+      title: 'Layout',
       theme: ThemeData(
         primarySwatch: Colors.yellow,
       ),
@@ -33,21 +34,14 @@ class MyBody extends StatefulWidget {
 class _MyBodyState extends State<MyBody> {
   int _index = 0;
 
-  final _contents = [
-    Text('index: 0, 首页'),
-    Text('index: 1, 收藏'),
-    Text('index: 2, 消息'),
-    Text('index: 3, 我的'),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
         title: new Text('drawer'),
       ),
-      body: new Center(
-        child: _contents[_index],
+      body: Container(
+        child: LayoutDemo(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
